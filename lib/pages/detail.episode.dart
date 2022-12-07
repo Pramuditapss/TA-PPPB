@@ -43,7 +43,7 @@ class _DetailEpisodeState extends State<DetailEpisode> {
             if (snapshot.hasData) {
               return Center(
                   child: Padding(
-                padding: const EdgeInsets.all(80),
+                padding: const EdgeInsets.all(50),
                 child: Card(
                   elevation: 15,
                   child: Column(
@@ -63,17 +63,17 @@ class _DetailEpisodeState extends State<DetailEpisode> {
                           ],
                         ),
                       ),
-                      Image.asset('assets/episode.png'),
+                      Image.asset('assets/episodes.png'),
                       const SizedBox(height: 5),
                       Container(
-                        padding: EdgeInsets.all(10),
+                        padding: EdgeInsets.all(15),
                         margin: EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(10),
                             color: Color.fromARGB(255, 25, 78, 110)),
                         child: Text('\"' + snapshot.data!.nama + '\"',
                             style: GoogleFonts.ubuntu(
-                                fontSize: 20, color: Colors.white)),
+                                fontSize: 15, color: Colors.white)),
                       ),
                     ],
                   ),
