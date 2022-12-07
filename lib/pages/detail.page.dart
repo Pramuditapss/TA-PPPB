@@ -61,7 +61,9 @@ class _DetailPageState extends State<DetailPage> {
                                 offset: const Offset(1, 1),
                               )
                             ],
-                            border: Border.all(width: 2, color: Colors.green)),
+                            border: Border.all(
+                                width: 2,
+                                color: Color.fromARGB(255, 25, 78, 110))),
                         child: Column(
                           children: [
                             Row(
@@ -88,7 +90,7 @@ class _DetailPageState extends State<DetailPage> {
                               child: Row(
                                 children: [
                                   Image.network(
-                                    'https://img.icons8.com/office/2x/gender.png',
+                                    'https://img.icons8.com/material/512/gender.png',
                                     width: 30,
                                     height: 30,
                                   ),
@@ -107,7 +109,7 @@ class _DetailPageState extends State<DetailPage> {
                               child: Row(
                                 children: [
                                   Image.network(
-                                    'https://img.icons8.com/cotton/2x/like.png',
+                                    'https://img.icons8.com/material/512/like.png',
                                     width: 30,
                                     height: 30,
                                   ),
@@ -127,7 +129,7 @@ class _DetailPageState extends State<DetailPage> {
                               child: Row(
                                 children: [
                                   Image.network(
-                                    'https://img.icons8.com/external-prettycons-lineal-color-prettycons/2x/external-human-shopping-prettycons-lineal-color-prettycons.png',
+                                    'https://img.icons8.com/material/512/standing-man.png',
                                     width: 22,
                                     height: 22,
                                   ),
@@ -146,7 +148,7 @@ class _DetailPageState extends State<DetailPage> {
                               child: Row(
                                 children: [
                                   Image.network(
-                                    'https://img.icons8.com/external-flatart-icons-flat-flatarticons/2x/external-location-contact-us-flatart-icons-flat-flatarticons.png',
+                                    'https://img.icons8.com/material/512/marker.png',
                                     width: 30,
                                     height: 30,
                                   ),
