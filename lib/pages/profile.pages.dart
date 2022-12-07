@@ -24,9 +24,6 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(
-          color: Colors.black,
-        ),
         elevation: 0,
         backgroundColor: Colors.white,
       ),
@@ -65,24 +62,6 @@ class _ProfileState extends State<Profile> {
                                 fontSize: 25, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Text(snapshot.data!.blog,
-                            style: GoogleFonts.ubuntu(
-                              color: Colors.grey,
-                            )),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Container(
-                              padding: const EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 27, 166, 197),
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: Text('Hello There!',
-                                  style: GoogleFonts.lato(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ))),
-                        ),
                       ],
                     ),
                   ),
@@ -95,7 +74,7 @@ class _ProfileState extends State<Profile> {
                           width: 5,
                         ),
                         Image.network(
-                          'https://img.icons8.com/fluency/2x/instagram-new.png',
+                          'https://img.icons8.com/material/512/instagram-new.png',
                           width: 50,
                           height: 50,
                         ),
@@ -112,7 +91,7 @@ class _ProfileState extends State<Profile> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Image.network(
-                          'https://img.icons8.com/color/2x/whatsapp.png',
+                          'https://img.icons8.com/material/512/whatsapp.png',
                           width: 50,
                           height: 50,
                         ),
@@ -142,24 +121,11 @@ class _ProfileState extends State<Profile> {
 class User {
   String img;
   String nama;
-  String location;
-  String blog;
-  String company;
 
-  User(
-      {required this.img,
-      required this.nama,
-      required this.location,
-      required this.blog,
-      required this.company});
+  User({required this.img, required this.nama});
 
   factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-        img: json['avatar_url'],
-        nama: json['name'],
-        location: json['location'],
-        blog: json['blog'],
-        company: json['company']);
+    return User(img: json['avatar_url'], nama: json['name']);
   }
 }
 
