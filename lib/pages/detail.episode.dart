@@ -1,124 +1,152 @@
 import 'dart:convert';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
+import 'package:tugas_akhir/pages/detail.episode.dart';
 
-class DetailEpisode extends StatefulWidget {
-  final int item;
-  final String nama;
-  const DetailEpisode({Key? key, required this.item, required this.nama})
-      : super(key: key);
+class Episode extends StatefulWidget {
+  const Episode({Key? key}) : super(key: key);
 
   @override
-  _DetailEpisodeState createState() => _DetailEpisodeState();
+  _EpisodeState createState() => _EpisodeState();
 }
 
-class _DetailEpisodeState extends State<DetailEpisode> {
-  late Future<EpisodeDetail> epsDetail;
+class _EpisodeState extends State<Episode> {
+  late Future<List<Show>> shows;
 
   @override
   void initState() {
     super.initState();
-    epsDetail = fetchDetails(widget.item);
+    shows = fetchShows();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
-        title: Text(
-          widget.nama,
-        ),
-        elevation: 0,
-      ),
       body: SingleChildScrollView(
-        child: Center(
-            child: FutureBuilder<EpisodeDetail>(
-          future: epsDetail,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Center(
-                  child: Padding(
-                padding: const EdgeInsets.all(50),
-                child: Card(
-                  elevation: 15,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              snapshot.data!.episode,
-                              style: GoogleFonts.ubuntu(fontSize: 15),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 35, top: 50),
+              child: Text(
+                'EPISODES',
+                style: TextStyle(
+                    color: Colors.black,
+                    letterSpacing: .5,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: SizedBox(
+                child: FutureBuilder<List<Show>>(
+                    future: shows,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                          physics: const ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (BuildContext context, int index) =>
+                              Container(
+                            margin: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  offset: const Offset(
+                                    5.0,
+                                    5.0,
+                                  ),
+                                  blurRadius: 10.0,
+                                  spreadRadius: 1.0,
+                                ),
+                                //BoxShadow
+                              ],
                             ),
-                            Text(
-                              snapshot.data!.release,
+                            child: Card(
+                              color: index % 2 == 0
+                                  ? Color.fromARGB(213, 33, 157, 188)
+                                  : Color(0xff8ecae6),
+                              shadowColor: Colors.black,
+                              child: ListTile(
+                                leading: Image.asset(
+                                  'assets/episodes.png',
+                                  width: 30,
+                                  height: 80,
+                                ),
+                                title: Text(
+                                  snapshot.data![index].nama,
+                                  style: GoogleFonts.ubuntu(
+                                      color: index % 2 == 0
+                                          ? Colors.white
+                                          : Colors.black),
+                                ),
+                                subtitle: Text(
+                                  snapshot.data![index].episode,
+                                  style: GoogleFonts.ubuntu(
+                                      color: index % 2 == 0
+                                          ? Colors.white
+                                          : Colors.black),
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailEpisode(
+                                        nama: snapshot.data![index].nama,
+                                        item: snapshot.data![index].id,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                      Image.asset('assets/episodes.png'),
-                      const SizedBox(height: 5),
-                      Container(
-                        padding: EdgeInsets.all(15),
-                        margin: EdgeInsets.only(bottom: 15),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Color.fromARGB(255, 25, 78, 110)),
-                        child: Text('\"' + snapshot.data!.nama + '\"',
-                            style: GoogleFonts.ubuntu(
-                                fontSize: 15, color: Colors.white)),
-                      ),
-                    ],
-                  ),
-                ),
-              ));
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
-            return const CircularProgressIndicator();
-          },
-        )),
+                          ),
+                        );
+                      }
+                      return const CircularProgressIndicator();
+                    }),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class EpisodeDetail {
-  String release;
-  String episode;
-  String nama;
-  int id;
+class Show {
+  final int id;
+  final String nama;
+  final String episode;
 
-  EpisodeDetail(
-      {required this.release,
-      required this.episode,
-      required this.nama,
-      required this.id});
+  Show({
+    required this.id,
+    required this.nama,
+    required this.episode,
+  });
 
-  factory EpisodeDetail.fromJson(json) {
-    return EpisodeDetail(
-        release: json['air_date'],
-        episode: json['episode'],
-        nama: json['name'],
-        id: json['id']);
+  factory Show.fromJson(Map<String, dynamic> json) {
+    return Show(id: json['id'], nama: json['name'], episode: json['episode']);
   }
 }
 
-Future<EpisodeDetail> fetchDetails(id) async {
-  var response = await http.get(
-    Uri.parse('https://rickandmortyapi.com/api/episode/$id'),
+// function untuk fetch api
+Future<List<Show>> fetchShows() async {
+  String api = 'https://rickandmortyapi.com/api/episode/';
+  final response = await http.get(
+    Uri.parse(api),
   );
 
   if (response.statusCode == 200) {
-    return EpisodeDetail.fromJson(jsonDecode(response.body));
+    var topShowsJson = jsonDecode(response.body)['results'] as List;
+
+    return topShowsJson.map((shows) => Show.fromJson(shows)).toList();
   } else {
-    throw Exception('Failed to load data');
+    throw Exception('Failed to load shows');
   }
 }
